@@ -1,58 +1,61 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
-
+import React, { useEffect } from "react";
+import { URL } from "app/appURL";
+import "App.css";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { fetchHarvardartmuseumsApi } from "slice/harvardartmuseumsData";
+import Image from "components/Image";
+let pageCount = 1;
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+	const harvardartmuseumsData = useAppSelector(
+		(state) => state.harvardartmuseumsData.harvardartmuseumsData
+	);
+	const dispatch = useAppDispatch();
+	useEffect(() => {
+		const getStorage = sessionStorage.getItem("count");
+		if (getStorage) {
+			dispatch(fetchHarvardartmuseumsApi(`${URL}&page=${getStorage}`));
+			pageCount = +getStorage;
+		} else {
+			dispatch(fetchHarvardartmuseumsApi(`${URL}&page=${pageCount}`));
+		}
+	}, []);
+	console.log(pageCount);
+
+	const handleShouMore = () => {
+		pageCount++;
+		sessionStorage.setItem("count", `${pageCount}`);
+		const getStorage = sessionStorage.getItem("count");
+		dispatch(fetchHarvardartmuseumsApi(`${URL}&page=${getStorage}`));
+		window.scrollTo(0, 0);
+	};
+	const handleShouLes = () => {
+		pageCount--;
+		sessionStorage.setItem("count", `${pageCount}`);
+		const getStorage = sessionStorage.getItem("count");
+		dispatch(fetchHarvardartmuseumsApi(`${URL}&page=${getStorage}`));
+		window.scrollTo(0, 0);
+	};
+
+	return (
+		<div className="App_contener">
+			<div className="App">
+				{harvardartmuseumsData.records.map((item) => (
+					<Image
+						key={item["id"]}
+						primaryimageurl={item["primaryimageurl"]}
+						id={item["id"]}
+						title={item["title"]}
+						images={item["images"]}
+					/>
+				))}
+			</div>
+			<div className="App-button-div">
+				<button onClick={handleShouLes}>{"< Shou less"}</button>
+				{pageCount}
+				<button onClick={handleShouMore}>{"Show more >"}</button>
+			</div>
+		</div>
+	);
 }
 
 export default App;
