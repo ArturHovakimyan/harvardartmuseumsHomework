@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export interface IImagesArray {
 	imageid: number;
 	description: string;
@@ -9,8 +8,13 @@ export interface IImagesArray {
 export interface IInitialState {
 	images: IImagesArray[];
 }
-const initialState: IInitialState = {
-	images: [],
+const initialState = {
+	regularElement: {
+		images: [],
+		description: null,
+		primaryimageurl:"",
+		imageid:null
+	},
 };
 
 export const imagesSlice = createSlice({
@@ -18,7 +22,7 @@ export const imagesSlice = createSlice({
 	initialState,
 	reducers: {
 		createImage(state, action) {
-			state.images = action.payload;
+			state.regularElement = {...action.payload};
 		},
 	},
 });

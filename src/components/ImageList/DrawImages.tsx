@@ -1,15 +1,12 @@
-import React from "react";
-
 export interface IImages {
 	imageid: number;
-	description: string;
 	baseimageurl: string;
+	handleNextFoto: (index:number) => void
 }
-const DrawImages = ({ baseimageurl, description, imageid }: IImages) => {
+const DrawImages = ({ baseimageurl, handleNextFoto,imageid }: IImages) => {
 	return (
-		<div className="App-contener">
-			<img className="App-image" src={baseimageurl} alt="" />
-			<span>{description}</span>
+		<div className="images-contener" onClick={() => handleNextFoto(imageid)}>
+			<img className="image-image" src={baseimageurl} alt="" />
 		</div>
 	);
 };

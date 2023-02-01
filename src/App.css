@@ -36,3 +36,31 @@
 	width: 200px;
 	height: 100px;
 }
+.image-first {
+	margin-right: 10px;
+	border-radius: 7px;
+	width: 500px;
+	height: 500px;
+}
+.images {
+	display: flex;
+}
+.image-first-box {
+	margin: 10px;
+	display: flex;
+}
+.images-contener {
+	margin: 10px;
+	width: 80px;
+	height: 80px;
+	padding: 3.5px;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid black;
+	border-radius: 7px;
+}
+.image-image {
+	width: 70px;
+	height: 70px;
+	border-radius: 7px;
+}

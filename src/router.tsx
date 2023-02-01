@@ -1,6 +1,6 @@
-import App from "App";
-import ImageList from "components/ImageList";
 import { createBrowserRouter } from "react-router-dom";
+import ImageList from "components/ImageList";
+import App from "App";
 
 const router = createBrowserRouter([
 	{

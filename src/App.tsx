@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import { fetchHarvardartmuseumsApi } from "slice/harvardartmuseumsData";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import Image from "components/Image";
+import { useEffect } from "react";
 import { URL } from "app/appURL";
 import "App.css";
-import { useAppDispatch, useAppSelector } from "app/hooks";
-import { fetchHarvardartmuseumsApi } from "slice/harvardartmuseumsData";
-import Image from "components/Image";
+import { createImage } from "slice/imagesSlice";
+
 let pageCount = 1;
+
 function App() {
 	const harvardartmuseumsData = useAppSelector(
 		(state) => state.harvardartmuseumsData.harvardartmuseumsData
@@ -18,8 +21,7 @@ function App() {
 		} else {
 			dispatch(fetchHarvardartmuseumsApi(`${URL}&page=${pageCount}`));
 		}
-	}, []);
-	console.log(pageCount);
+	}, [dispatch]);
 
 	const handleShouMore = () => {
 		pageCount++;
@@ -35,6 +37,12 @@ function App() {
 		dispatch(fetchHarvardartmuseumsApi(`${URL}&page=${getStorage}`));
 		window.scrollTo(0, 0);
 	};
+	const handleFirstImages = (id: number) => {
+		const element = harvardartmuseumsData.records.find(
+			(item) => item["id"] === id
+		);
+		dispatch(createImage(element));
+	};
 
 	return (
 		<div className="App_contener">
@@ -45,12 +53,17 @@ function App() {
 						primaryimageurl={item["primaryimageurl"]}
 						id={item["id"]}
 						title={item["title"]}
-						images={item["images"]}
+						handleFirstImages={handleFirstImages}
 					/>
 				))}
 			</div>
 			<div className="App-button-div">
-				<button onClick={handleShouLes}>{"< Shou less"}</button>
+				<button
+					disabled={pageCount === 1 ? true : false}
+					onClick={handleShouLes}
+				>
+					{"< Shou less"}
+				</button>
 				{pageCount}
 				<button onClick={handleShouMore}>{"Show more >"}</button>
 			</div>
